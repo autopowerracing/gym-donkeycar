@@ -162,6 +162,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
             self.fns[msg_type](message)
         else:
             logger.warning(f'unknown message type {msg_type}')
+        return msg_type
 
     ## ------- Env interface ---------- ##
 
@@ -182,9 +183,19 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.missed_checkpoint = False
         self.dq = False
 
+    def get_msg_types(self):
+        return self.fns.keys()
 
     def get_sensor_size(self):
         return self.camera_img_size
+
+    def get_telemetry(self):
+        return {
+            "x": self.x, 
+            "y": self.y, 
+            "z": self.z, 
+            "speed": self.speed
+        }
 
     def take_action(self, action):
         self.send_control(action[0], action[1])
